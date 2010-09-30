@@ -33,7 +33,7 @@ class MdownWeb
                                         'sitename' => 'MdownWeb',
                                   	    'header' => '',
                                         'footer' => '',
-                                        'body' => '',                        
+                                        'body' => '',
     );
     
     /**
