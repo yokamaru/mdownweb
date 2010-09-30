@@ -1,32 +1,32 @@
 <?php
 /**
- * 
+ * MdownWebの主要処理を行うクラスを記述したファイル
+ * @author YoKamaru
  */
 
 require dirname(__FILE__) . '/../markdown/markdown.php';
 require dirname(__FILE__) . '/errors.php';
 
 /**
- * 
+ * MdownWebの主要処理を行うクラス
  * @author YoKamaru
- *
  */
 class MdownWeb
 {
     /**
-     * 各ページの中身を記述したファイル（*.mdown）が置かれているディレクトリ
+     * 各ページの中身を記述したファイル（*.mdown）が置かれているディレクトリツリーのトップディレクトリ
      * @var string
      */
     protected $article_directory;
     
     /**
-     * 
+     * リクエストされたページの絶対パス
      * @var string
      */
     protected $request_realpath;
     
     /**
-     * 
+     * テンプレートに埋め込む値が未定である際に使用するデフォルト値
      * @var array
      */
     protected $template_default = array('title' => 'Undefined',
@@ -37,13 +37,23 @@ class MdownWeb
     );
     
     /**
-     * 
+     * テンプレートに埋め込む値
      * @var array
      */
     protected $template = array();
     
+    /**
+     * 出力するHTTP Status codeを指定
+     * 
+     * 200番代以外のStatus code（エラー）を返す際に指定する
+     * @var integer
+     */
     protected $http_errorno;
     
+    /**
+     * コンストラクタ
+     * @param $directory 各ページの中身を記述したファイル（*.mdown）が置かれているディレクトリツリーのトップディレクトリ
+     */
     function __construct($directory)
     {
         if (!file_exists($directory))
@@ -57,8 +67,8 @@ class MdownWeb
     }
     
     /**
-     * 
-     * @param $request
+     * ユーザからのリクエストをパースし，該当するファイルを読み込む
+     * @param $request ユーザから与えられたリクエスト
      */
     public function load($request)
     {
@@ -96,7 +106,9 @@ class MdownWeb
     }
     
     /**
-     * 
+     * Markdown形式のファイルを読み込み，Markupする
+     * @throws Exception 外部の関数・ライブラリに起因する致命的なエラー
+     * @return string MarkupしたHTML文字列
      */
     protected function load_markdown()
     {
@@ -117,7 +129,8 @@ class MdownWeb
     }
     
     /**
-     * 
+     * *.mdownファイルに付随した.iniファイル（*.mdown.ini）を読み込む
+     * @return array 読み込んだiniファイルの中身　エラーが発生した場合は空配列を返す
      */
     protected function load_ini()
     {
@@ -147,6 +160,9 @@ class MdownWeb
      * リクエストされたページに対して正当なアクセス権があるかをチェックする．
      * 読み込み権限が無いことに起因するエラーやディレクトリトラバーサルの防止を目的とする．
      * @param $request アクセスしたユーザからリクエストされたページ
+     * @throws Exception 不当な引数に起因するエラー
+     * @throws FileNotFoundException リクエストされたファイルが見つからない
+     * @throws PermissionDeniedException リクエストされたファイルへのアクセス権が無い
      */
     protected function checkRequest($request)
     {
@@ -201,6 +217,7 @@ class MdownWeb
     /**
      * Markdown形式の文字列をMarkupし，HTMLを返す
      * @param $mdown_text Markdown形式の文字列
+     * @return string MarkupしたHTML文字列
      */
     protected function mdownToHtml($mdown_text)
     {
@@ -209,11 +226,14 @@ class MdownWeb
         return $html_text;
     }
     
+    /**
+     * テンプレートファイルを読み込み，出力する
+     */
     public function output()
     {
         // テンプレート用の値の最終マージ
         $template = array_merge($this->template_default, $this->template);
         
-        require 'template/template.php';
+        require dirname(__FILE__) . '/template/template.php';
     }
 }
