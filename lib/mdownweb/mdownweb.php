@@ -31,7 +31,7 @@ class MdownWeb
      */
     protected $template_default = array('title' => 'Undefined',
                                         'sitename' => 'MdownWeb',
-                                  	    'header' => '',
+                                        'header' => '',
                                         'footer' => '',
                                         'body' => '',
     );
@@ -234,6 +234,25 @@ class MdownWeb
         // テンプレート用の値の最終マージ
         $template = array_merge($this->template_default, $this->template);
         
+        // HTTPヘッダ出力
+        $this->outputHttpHeader();
+        
         require dirname(__FILE__) . '/template/template.php';
+    }
+    
+    /**
+     * セットされたHTTP Status Codeに合わせたヘッダーを出力する
+     */
+    protected function outputHttpHeader()
+    {
+        switch($this->http_errorno)
+        {
+            case 403:
+                header("HTTP/1.1 404 Not Found");
+                break;
+            case 404:
+                header("HTTP/1.1 403 Forbidden");
+                break;
+        }
     }
 }

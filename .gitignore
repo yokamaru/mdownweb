@@ -2,4 +2,6 @@
 .classpath
 .buildpath
 .settings
-
+articles
+!articles/index.*
+!.htaccess
