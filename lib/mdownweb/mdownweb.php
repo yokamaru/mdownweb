@@ -56,6 +56,10 @@ class MdownWeb
      */
     function __construct($directory)
     {
+        // デフォルトテンプレートのセット
+        $this->setTemplate($this->template_default);
+        
+        // ディレクトリツリーの存在チェック
         if (!file_exists($directory))
         {
             throw new Exception('No such directory');
@@ -68,14 +72,18 @@ class MdownWeb
     
     /**
      * ユーザからのリクエストをパースし，該当するファイルを読み込む
-     * @param $request ユーザから与えられたリクエスト
+     * @param $get_paramname GETのパラメータ名
+     * @param $default ページ未指定時に表示するページ名
      */
-    public function load($request)
+    public function load($get_paramname, $default = 'index')
     {
+        // ページが明示的に指定されたかチェック
+        $request = isset($_GET[$get_paramname]) ? $_GET[$get_paramname] : $default;  
+        
         // リクエストの正当性検証
         try
         {
-            $request_realpath = $this->checkRequest($request);
+            $request_realpath = $this->checkRequest($get_paramname);
         }
         catch (FileNotFoundException $e)
         {
@@ -97,10 +105,10 @@ class MdownWeb
         $this->request_realpath = $request_realpath;
         
         // MarkdownなテキストをMarkupする
-        $this->template = array_merge($this->template, array('body' => $this->load_markdown()));
+        $this->setTemplate(array('body' => $this->load_markdown()));
         
         // 各ファイル固有の設定を読み込む
-        $this->template = array_merge($this->template, $this->load_ini());
+        $this->setTemplate($this->load_ini());
         
         return;
     }
@@ -215,6 +223,15 @@ class MdownWeb
     }
     
     /**
+     * テンプレートに値をセットする
+     * @param $template_array セットする値の配列
+     */
+    public function setTemplate($template_array)
+    {
+        $this->template = array_merge($this->template, $template_array);
+    }
+    
+    /**
      * Markdown形式の文字列をMarkupし，HTMLを返す
      * @param $mdown_text Markdown形式の文字列
      * @return string MarkupしたHTML文字列
@@ -231,9 +248,6 @@ class MdownWeb
      */
     public function output()
     {
-        // テンプレート用の値の最終マージ
-        $template = array_merge($this->template_default, $this->template);
-        
         // HTTPヘッダ出力
         $this->outputHttpHeader();
         

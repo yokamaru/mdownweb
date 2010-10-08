@@ -19,7 +19,11 @@ require 'lib/mdownweb/mdownweb.php';
 
 $site = new MdownWeb(ARTICLE_DIR);
 
-$request = isset($_GET['p']) ? $_GET['p'] : 'index';
+$site->setTemplate(array('sitename' => 'YourWebSiteName',
+                         'title' => 'DefaultTitle',
+                         'header' => 'DefaultHeader',
+                         'footer' => 'DefaultFooter',
+));
 
-$site->load($request);
+$site->load('p', 'index');
 $site->output();
