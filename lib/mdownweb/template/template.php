@@ -9,9 +9,15 @@
 </head>
 
 <body>
+<div id="header">
 <?php echo $template['header'] ?>
+</div>
+<div id="main">
 <?php echo $template['body'] ?>
+</div>
+<div id="footer">
 <?php echo $template['footer'] ?>
+</div>
 </body>
 
 </html>
