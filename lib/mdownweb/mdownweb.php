@@ -83,7 +83,7 @@ class MdownWeb
         // リクエストの正当性検証
         try
         {
-            $request_realpath = $this->checkRequest($get_paramname);
+            $request_realpath = $this->checkRequest($request);
         }
         catch (FileNotFoundException $e)
         {
