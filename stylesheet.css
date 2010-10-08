@@ -1,42 +1,32 @@
 body{
-margin:0;
-padding:0 100px 0 50px;
-
+    margin:0;
+    padding:0 100px 0 50px;
 }
 
 div{
     padding-left: 40px;
 }
 
-div#main{
-	margin: 0;
-}
-
-div#contents{
-	margin:0;
-}
-
 h1{
-	font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 h2{
-	font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 h3{
-	font-family:Arial, Helvetica, sans-serif;
-}
-
-div.list
-{
-    margin: 0;
-}
-
-div.description{
-    margin: 0;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 p{
-	font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
+    padding-left: 2em;
+}
+
+pre{
+    margin-left: 4em;
+    padding: 0.5ex 0 0.5ex 0.5em;
+    border-style: dashed;
+    border-width: 1px;
 }
