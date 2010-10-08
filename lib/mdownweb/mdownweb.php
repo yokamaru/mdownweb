@@ -78,7 +78,14 @@ class MdownWeb
     public function load($get_paramname, $default = 'index')
     {
         // ページが明示的に指定されたかチェック
-        $request = isset($_GET[$get_paramname]) ? $_GET[$get_paramname] : $default;  
+        if (isset($_GET[$get_paramname]) && !empty($_GET[$get_paramname]))
+        {
+            $request = $_GET[$get_paramname];
+        }
+        else
+        {
+            $request = $default;
+        }
         
         // リクエストの正当性検証
         try
