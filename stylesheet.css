@@ -3,10 +3,6 @@ body{
     padding:0 80px 0 80px;
 }
 
-div{
-    padding-left: 40px;
-}
-
 div#header
 {
     padding: 0;
@@ -14,7 +10,7 @@ div#header
 
 div#footer
 {
-    padding: 0;
+    padding: 1ex 0 1ex 0;
     text-align: center;
 }
 
