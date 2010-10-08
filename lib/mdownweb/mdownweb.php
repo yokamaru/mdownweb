@@ -248,6 +248,9 @@ class MdownWeb
      */
     public function output()
     {
+        // 出力データをセット
+        $template = $this->template;
+        
         // HTTPヘッダ出力
         $this->outputHttpHeader();
         
