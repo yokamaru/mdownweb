@@ -180,6 +180,9 @@ class MdownWeb
             throw new Exception('Request is empty');
         }
         
+        // NULLバイト除去
+        $request = str_replace("\0", "", $request);
+        
         // リクエストの意図（ディレクトリorファイル）を判別
         // 末尾が/(or \)ならディレクトリを意図したとみなし，index.mdocを付加
         // （DirectoryIndex的処理）
@@ -209,8 +212,8 @@ class MdownWeb
         
         if ($is_subdir === FALSE)
         {
-            // ディレクトリトラバーサル検出
-            throw new PermissionDeniedException('Detect directory traversal attack');
+            // パストラバーサル検出
+            throw new PermissionDeniedException('Detect path traversal attack');
         }
         
         if (is_readable($path_real) === FALSE)
