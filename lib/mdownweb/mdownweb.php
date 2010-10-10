@@ -6,6 +6,7 @@
 
 require dirname(__FILE__) . '/../markdown/markdown.php';
 require dirname(__FILE__) . '/errors.php';
+require dirname(__FILE__) . '/plugin.php';
 
 /**
  * MdownWebの主要処理を行うクラス
@@ -51,6 +52,12 @@ class MdownWeb
     protected $http_errorno;
     
     /**
+     * プラグイン利用のためのインスタンス格納用変数
+     * @var Object
+     */
+    protected $plugin_object;
+    
+    /**
      * コンストラクタ
      * @param $directory 各ページの中身を記述したファイル（*.mdown）が置かれているディレクトリツリーのトップディレクトリ
      */
@@ -68,6 +75,9 @@ class MdownWeb
         {
             $this->article_directory = realpath($directory);
         }
+        
+        // プラグイン利用のためのインスタンス生成
+        $this->plugin_object = new Plugin();
     }
     
     /**
@@ -281,5 +291,10 @@ class MdownWeb
                 header("HTTP/1.1 403 Forbidden");
                 break;
         }
+    }
+    
+    protected function plugin()
+    {
+        return $this->plugin_object;
     }
 }
