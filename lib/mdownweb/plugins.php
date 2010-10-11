@@ -62,14 +62,26 @@ class Plugins
     /**
      * プラグインを実行する
      */
-    public function exec()
+    public function exec($template)
     {
         reset($this->plugin_instance);
         while (list($plugin_name, $instance) = each($this->plugin_instance))
         {
-            $this->exec_result[$plugin_name] = $instance->exec();
+            $this->exec_result[$plugin_name] = $instance->exec($template, $exec_result);
         }
         return $this;
+    }
+    
+    /**
+     * プラグイン実行結果のGetter/**
+     * プラグインを実行する
+     * @param $template MdownWeb本体によってセットされたテンプレート情報
+     * @param $exec_result 他のプラグインによってセットされた情報 
+     * @return プラグインの実行結果
+     */
+    public function getExecResult()
+    {
+        return $this->exec_result;
     }
     
 }

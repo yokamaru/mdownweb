@@ -25,5 +25,6 @@ $site->setTemplate(array('sitename' => 'YourWebSiteName',
                          'footer' => 'DefaultFooter',
 ));
 
-$site->load('p', 'index');
+$site->plugin()->add(array('Survey'));
+$site->load();
 $site->output();

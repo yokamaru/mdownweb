@@ -85,7 +85,7 @@ class MdownWeb
      * @param $get_paramname GETのパラメータ名
      * @param $default ページ未指定時に表示するページ名
      */
-    public function load($get_paramname, $default = 'index')
+    public function load($get_paramname = 'p', $default = 'index')
     {
         // ページが明示的に指定されたかチェック
         if (isset($_GET[$get_paramname]) && !empty($_GET[$get_paramname]))
@@ -268,13 +268,37 @@ class MdownWeb
      */
     public function output()
     {
-        // 出力データをセット
+        // 出力前処理の実行
+        $this->beforeOutput();
+        
+        // 出力
         $template = $this->template;
+        require dirname(__FILE__) . '/template/template.php';
+        
+        // 出力後処理の実行
+        $this->afterOutput();
+    }
+    
+    /**
+     * 出力前に実行されるメソッド
+     */
+    protected function beforeOutput()
+    {
+        // プラグイン実行
+        $this->plugin()->exec($this->template);
+        $plugin_result = $this->plugin()->getExecResult();
+        $this->template = array_merge($this->template, $plugin_result);
         
         // HTTPヘッダ出力
         $this->outputHttpHeader();
+    }
+    
+    /**
+     * 出力後に実行されるメソッド
+     */
+    protected function afterOutput()
+    {
         
-        require dirname(__FILE__) . '/template/template.php';
     }
     
     /**
@@ -293,7 +317,13 @@ class MdownWeb
         }
     }
     
-    protected function plugin()
+    /**
+     * プラグイン処理のための参照
+     * 
+     * メソッドチェーン利用のためのメソッド
+     * @return Pluginクラスのインスタンスへの参照
+     */
+    public function plugin()
     {
         return $this->plugin_object;
     }
